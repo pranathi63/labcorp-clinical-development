@@ -75,4 +75,18 @@ export class TodosListComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  displayFilteredData() {
+    switch(this.mode) {
+      case 'Completed': {
+        return this.allTodos.filter(todo => todo.completed).length;
+      }
+      case 'Active': {
+        return this.allTodos.filter(todo => !todo.completed).length;
+      }
+      default: {
+        return true;
+      }
+    }
+  }
 }

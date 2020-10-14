@@ -1,18 +1,26 @@
-<ul class="todo-list" *ngIf="allTodos?.length">
-  <li *ngFor="let todo of allTodos;let $index = index">
-    <ng-container *ngIf="displayTodo(todo)">
-      <div class="view" *ngIf="editIndex !== $index; else editTodo" (dblclick)="toggleEdit($index)">
-        <input class="toggle" name="checkbox_{{$index}}" id="checkbox_{{$index}}" type="checkbox"
-          [attr.checked]="todo.completed" value="{{todo.text}}" (change)="toggleComplete($index)" />
-        <label>{{todo.text}}</label>
-        <button class="destroy" (click)="removeTodo($index)"></button>
-      </div>
-      <ng-template #editTodo>
-        <div class="view">
-          <input name="todo" class="new-todo" [ngModel]="todo.text" (blur)="updateTodo($index, $event.target.value)"
-            #todoInput autofocus>
+<ul class="todo-list" *ngIf="allTodos?.length; else noTodo">
+  <ng-container *ngIf="displayFilteredData();else noTodo">
+    <li *ngFor="let todo of allTodos;let $index = index" [ngClass]="{'completed': todo.completed}">
+      <ng-container *ngIf="displayTodo(todo)">
+        <div class="view" *ngIf="editIndex !== $index; else editTodo" (dblclick)="toggleEdit($index)">
+          <input class="toggle" name="checkbox_{{$index}}" id="checkbox_{{$index}}" type="checkbox"
+            [attr.checked]="todo.completed" value="{{todo.text}}" (change)="toggleComplete($index)" />
+          <label>{{todo.text}}</label>
+          <button class="destroy" (click)="removeTodo($index)"></button>
         </div>
-      </ng-template>
-    </ng-container>
-  </li>
+        <ng-template #editTodo>
+          <div class="view">
+            <input name="todo" class="new-todo" [ngModel]="todo.text" (blur)="updateTodo($index, $event.target.value)"
+              #todoInput autofocus>
+          </div>
+        </ng-template>
+      </ng-container>
+    </li>
+  </ng-container>
 </ul>
+
+<ng-template #noTodo>
+  <div class="no-matches">
+    No matches found...
+  </div>
+</ng-template>
